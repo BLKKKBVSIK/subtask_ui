@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:subtask_ui/subtask_ui.dart';
+import 'package:subtask_ui/subtasks.dart';
 
 void main() {
   test('adds one to input values', () {
