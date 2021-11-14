@@ -9,13 +9,20 @@ import 'package:subtask_ui/subtasks_item.dart';
 import 'package:subtask_ui/subtasks_viewmodel.dart';
 
 class SubTasks extends StatelessWidget {
-  SubTasks({Key? key, this.topTree, this.bottomTree, required this.mainElement})
-      : super(key: key);
+  SubTasks({
+    Key? key,
+    this.topTree,
+    this.bottomTree,
+    this.lineColor,
+    required this.mainElement,
+  }) : super(key: key);
 
   final List<SubTaskItem>? topTree;
   final List<SubTaskItem>? bottomTree;
   final Widget mainElement;
   final Color? subTaskItemBackgroundColor = Color(0xFF1A1A28);
+  final Color? lineColor;
+  final double lineWidth = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +40,8 @@ class SubTasks extends StatelessWidget {
               topTree: topTree,
               //bottomTree: bottomTree,
               model: model,
+              lineColor: lineColor,
+              lineWidth: lineWidth,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,12 +58,12 @@ class SubTasks extends StatelessWidget {
   }
 }
 
-class SubtaskWrapper extends StatefulWidget {
+class SubtaskWrapper extends StatelessWidget {
   final Widget child;
   final Function onChange;
   final SubTasksViewModel model;
 
-  const SubtaskWrapper({
+  SubtaskWrapper({
     Key? key,
     required this.onChange,
     required this.model,
@@ -62,17 +71,12 @@ class SubtaskWrapper extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _SubtaskWrapperState createState() => _SubtaskWrapperState();
-}
-
-class _SubtaskWrapperState extends State<SubtaskWrapper> {
-  @override
   Widget build(BuildContext context) {
     SchedulerBinding.instance!.addPostFrameCallback(postFrameCallback);
 
     return Container(
       key: widgetKey,
-      child: widget.child,
+      child: child,
     );
   }
 
@@ -87,7 +91,7 @@ class _SubtaskWrapperState extends State<SubtaskWrapper> {
     if (oldSize == newSize) return;
 
     oldSize = newSize;
-    widget.onChange(newSize, widget.model);
+    onChange(newSize, model);
   }
 }
 
@@ -95,20 +99,24 @@ class TreePainter extends CustomPainter {
   final List<Widget>? topTree;
   final List<Widget>? bottomTree;
   final SubTasksViewModel model;
+  final Color? lineColor;
+  final double lineWidth;
 
   TreePainter({
     this.bottomTree,
     this.topTree,
+    this.lineColor,
+    required this.lineWidth,
     required this.model,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint line = Paint()
-      ..color = const Color(0xFFFBFBFB) // Line Color
+      ..color = lineColor ?? const Color(0xFFFBFBFB) // Line Color
       ..strokeCap = StrokeCap.round
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 5;
+      ..strokeWidth = lineWidth;
 
     double degToRad(num deg) => deg * (pi / 180.0);
 
@@ -176,8 +184,8 @@ class TreePainter extends CustomPainter {
             }
           }
 
-          path.moveTo(20, currentHeight);
-          path.lineTo(currentWidth - rectSize, currentHeight);
+          path.moveTo(model.topSizeList.elementAt(i).width - 10, currentHeight);
+          path.lineTo(currentWidth - 25, currentHeight);
 
           path.arcTo(
               Rect.fromLTWH(
