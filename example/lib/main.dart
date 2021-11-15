@@ -1,7 +1,7 @@
-import 'package:example/main_element.dart';
 import 'package:flutter/material.dart';
 import 'package:subtask_ui/subtasks.dart';
-import 'package:subtask_ui/subtasks_item.dart';
+import 'package:subtask_ui/subtask_item.dart';
+import 'package:subtask_ui/subtask_main_element.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,36 +40,32 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: SingleChildScrollView(
-          physics: AlwaysScrollableScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
+              children: const <Widget>[
                 SubTasks(
-                  mainElement: MainElement(
-                    color: Colors.green,
+                  lineColor: Colors.orange,
+                  mainElement: SubTaskMainElement(
+                    progressIndicatorColor: Colors.green,
                     goal: 5,
-                    name: "Example",
                     progress: 2,
+                    text: "Example",
                   ),
-                  topTree: const [
+                  topTree: [
                     SubTaskItem(
-                      name: "Un texte plus long",
-                      completed: true,
+                      text: "First task",
                     ),
                     SubTaskItem(
-                      name: "Task3",
-                      completed: true,
+                      text: "Second task with a longer text",
                     ),
                     SubTaskItem(
-                      name:
-                          "Task4 with a lot of text too and even much text is bigger etc etc etc",
-                      completed: true,
+                      text: "A really long task that takes more than 4 lines",
                     ),
                     SubTaskItem(
-                      name: "Task4 with very long text and much more details",
-                      completed: true,
+                      text: "Just another task",
                     ),
                   ],
                   //bottomTree: [],
