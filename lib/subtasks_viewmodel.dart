@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:subtask_ui/subtasks.dart';
+import 'subtask_wrapper.dart';
 
 class SubTasksViewModel extends BaseViewModel {
   /// List of widget displayed on top of the [_mainElement].

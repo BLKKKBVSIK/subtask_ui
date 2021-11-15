@@ -3,24 +3,23 @@ library subtask_ui;
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:stacked/stacked.dart';
-import 'package:subtask_ui/subtasks_item.dart';
+import 'package:subtask_ui/subtask_wrapper.dart';
+import 'package:subtask_ui/subtask_item.dart';
 import 'package:subtask_ui/subtasks_viewmodel.dart';
 
 class SubTasks extends StatelessWidget {
-  SubTasks({
+  const SubTasks({
     Key? key,
     this.topTree,
-    this.bottomTree,
+    //this.bottomTree,
     this.lineColor,
     required this.mainElement,
   }) : super(key: key);
 
   final List<SubTaskItem>? topTree;
-  final List<SubTaskItem>? bottomTree;
+  //final List<SubTaskItem>? bottomTree;
   final Widget mainElement;
-  final Color? subTaskItemBackgroundColor = Color(0xFF1A1A28);
   final Color? lineColor;
   final double lineWidth = 5;
 
@@ -30,7 +29,7 @@ class SubTasks extends StatelessWidget {
       viewModelBuilder: () => SubTasksViewModel(),
       onModelReady: (model) => model.initialize(
         topChildren: topTree,
-        bottomChildren: bottomTree,
+        //bottomChildren: bottomTree,
         mainElement: mainElement,
       ),
       builder: (context, model, child) => Column(
@@ -55,43 +54,6 @@ class SubTasks extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class SubtaskWrapper extends StatelessWidget {
-  final Widget child;
-  final Function onChange;
-  final SubTasksViewModel model;
-
-  SubtaskWrapper({
-    Key? key,
-    required this.onChange,
-    required this.model,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    SchedulerBinding.instance!.addPostFrameCallback(postFrameCallback);
-
-    return Container(
-      key: widgetKey,
-      child: child,
-    );
-  }
-
-  GlobalKey widgetKey = GlobalKey();
-  Size? oldSize;
-
-  void postFrameCallback(_) {
-    BuildContext? context = widgetKey.currentContext;
-    if (context == null) return;
-
-    Size? newSize = context.size;
-    if (oldSize == newSize) return;
-
-    oldSize = newSize;
-    onChange(newSize, model);
   }
 }
 
